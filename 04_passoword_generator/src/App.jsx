@@ -23,27 +23,32 @@ function App() {
     }
     setPassoword(pass)  
   }, [length, numberAllowed, charAllowed, setCharAllowed])
+  useEffect(() => {passwordGenerator()},[length, numberAllowed, charAllowed, passwordGenerator] )
   const copyPasswordToClipboard = useCallback(() => {
     passwordRef.current?.select()
     // passwordRef.current?.setSelectionRange(0,3) only selects 3 char
     window.navigator.clipboard.writeText(passoword)
   },[passoword])
-  useEffect(() => {passwordGenerator()},[length, numberAllowed, charAllowed, passwordGenerator] )
+
   return (
     <>
     <div className='w-full max-w-md mx-auto shadow-md rounded-lg px-1 my-2 text-orange-500 bg-gray-700'>
       <h1 className='text-center text-white my-3'>Password Generator</h1>
-    <div className='flex shadow rounded-lg overflow-hidden mb-10'>
-      <input type="text" 
-      value={passoword} 
-      className='outline-none w-full py-1 px-3'
-      placeholder='passoword'
-      readOnly
-      ref={passwordRef} />
-      <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
-      onClick={copyPasswordToClipboard}>Copy</button>  
+    <div className='grid grid-cols-5 gap-2 my-6 ml-2.5'>
+      <div className=' flex shadow col-span-4 border rounded-lg'>
+        <input type="text" 
+        value={passoword} 
+        className='border rounded-lg w-full'
+        placeholder='passoword'
+        readOnly
+        ref={passwordRef} />
+      </div>
+      <div className='col-span-1'>
+        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
+        onClick={copyPasswordToClipboard}>Copy</button>
+      </div>
     </div>
-    <div className='flex text-sm gap-x-2'>
+    <div className='flex text-sm justify-between pb-2'>
       <div className='flex items-center gap-x-2'>
         <input type="range"
         min={8}
