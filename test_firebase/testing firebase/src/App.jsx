@@ -79,3 +79,11 @@ function App() {
 }
 
 export default App
+  
+    // addDoc(colRef, {
+    //   title: addBookForm.title.value,
+    //   author: addBookForm.author.value
+    // })
+    // .then(() => {
+    //   addBookForm.reset()
+    // })
