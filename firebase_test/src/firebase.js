@@ -3,7 +3,8 @@ import { initializeApp } from 'firebase/app'
 import {
   getFirestore,collection,getDocs,addDoc,
   deleteDoc,doc,onSnapshot,
-  query,where
+  query,where,orderBy,serverTimestamp,
+  getDoc
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -37,43 +38,53 @@ function firebasels(){
     // realtime data
     
     //queries
-    const q = query(colRef, where("author","==","Sarwe"))
+    const q = query(colRef)
 
     //Real time data update
     onSnapshot(q, (snapshot) => {
         let books = []
         snapshot.docs.forEach(doc => {
-        books.push({ ...doc.data(), id: doc.id })
+        books.push({ ...doc.data(), id: doc.id})
         })
         console.log(books)
+        console.log("hiii");
     })
 
     //adding documents
     const addBookForm = document.querySelector('.add')
     addBookForm.addEventListener('submit', (e) => {
-    e.preventDefault()
+      e.preventDefault()
 
-    addDoc(colRef, {
-        title: addBookForm.title.value,
-        author: addBookForm.author.value,
-    })
-    .then(() => {
-        addBookForm.reset()
-    })
+      addDoc(colRef, {
+          title: addBookForm.title.value,
+          author: addBookForm.author.value,
+          createdAt: serverTimestamp()
+        })
+        .then(() => {
+          addBookForm.reset()
+        })
     })
 
     // deleting docs
     const deleteBookForm = document.querySelector('.delete')
     deleteBookForm.addEventListener('submit', (e) => {
-    e.preventDefault()
+      e.preventDefault()
 
-    const docRef = doc(db, 'books', deleteBookForm.id.value)
+      const docRef = doc(db, 'books', deleteBookForm.id.value)
 
-    deleteDoc(docRef)
-        .then(() => {
+      deleteDoc(docRef)
+      .then(() => {
         deleteBookForm.reset()
-        })
+      })
     })
+
+    //get a single document
+
+    const docRef = doc(db, 'books','yA2AveLTkYsaOVDAXobl') 
+    getDoc(docRef)
+      .then((doc) =>{
+        console.log(doc.data(),doc.id);
+      })
 }
-firebasels();
+// firebasels();
 export default firebasels
