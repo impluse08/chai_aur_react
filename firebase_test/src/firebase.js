@@ -4,7 +4,7 @@ import {
   getFirestore,collection,getDocs,addDoc,
   deleteDoc,doc,onSnapshot,
   query,where,orderBy,serverTimestamp,
-  getDoc
+  getDoc, updateDoc
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -80,11 +80,29 @@ function firebasels(){
 
     //get a single document
 
+    // const docRef = doc(db, 'books','yA2AveLTkYsaOVDAXobl') 
+    // getDoc(docRef)
+    //   .then((doc) =>{
+    //     console.log(doc.data(),doc.id);
+    //   })
+
+    // Real time document update
     const docRef = doc(db, 'books','yA2AveLTkYsaOVDAXobl') 
-    getDoc(docRef)
-      .then((doc) =>{
-        console.log(doc.data(),doc.id);
+    onSnapshot(docRef, (doc) => {
+      console.log(doc.data(), doc.id);
+    })
+
+    // updating a document
+    const updateForm = document.querySelector('.update')
+    updateForm.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const docRef = doc(db, 'books',updateForm.id.value) 
+      updateDoc(docRef, {
+        title: 'update title'
       })
+      .then(() => {
+        updateForm.reset()
+      })
+    })
 }
-// firebasels();
 export default firebasels
